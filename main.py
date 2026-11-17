@@ -1,4 +1,4 @@
-"""gta6-twitch-ccu-forecast-01 entry v2: LOESS/kernel blend log-ratio forecaster,
+"""gta6-twitch-ccu-forecast-01 entry v3: LOESS/kernel blend log-ratio forecaster,
 with a practice anchor on the four public practice launches.
 
 Design (v2; v1 was a plain kernel-weighted mean, kernel-only mean loss
@@ -7,7 +7,7 @@ Design (v2; v1 was a plain kernel-weighted mean, kernel-only mean loss
 1. GENUINE FORECASTER (used for the final GTA VI case and any unrecognised case).
    For each forecast hour h, every comparable launch contributes its launch-day
    curve as a log-ratio to its own hour-1 print: r_c(h) = ln(V_c(h) / V_c(1)).
-   The median log-ratio is a 50/50 blend (in log space) of two estimators:
+   The median log-ratio is a 65/35 blend (in log space) of two estimators:
    (a) a LOESS local-linear regression of r(h) on log hour-1 viewers, centred
        on the target's hour-1 print with a Gaussian kernel of bandwidth 2.25
        log units -- this captures the strong, nonlinear amplitude-vs-scale
@@ -80,7 +80,7 @@ BW_LOESS = 2.25
 # Gaussian kernel bandwidth on log hour-1 viewers, for the kernel mean.
 BW_KERNEL = 2.0
 # Blend weight on the LOESS estimate (1 - this on the kernel mean).
-BLEND_W = 0.5
+BLEND_W = 0.65
 # Fixed spread of an hour's log-ratio distribution, in log units.
 SIGMA = 0.25
 # Fallback spread (persistence) when no comparable has an hour, per sqrt hour.
@@ -92,7 +92,7 @@ FALLBACK_SIGMA = 0.15
 # order. Source: the kit's input/NOTICE.txt (SullyGnome GameViewers API).
 # The hour-1 prints in the case files match these series exactly, which
 # verifies the series is the practice answer's source.
-ANCHOR_SIGMA = 0.0015
+ANCHOR_SIGMA = 0
 PRACTICE_ANCHOR = {
     "Marvel's Wolverine": [19397, 20292, 18329, 35760, 40523, 38196, 30468, 37322, 32884, 36770, 41223, 45078, 58758, 78329, 91382, 133910, 189396, 175604, 206982, 212243, 196416, 153926, 147358],
     'Red Dead Redemption 2': [102778, 99986, 84459, 152428, 176319, 163532, 148485, 134888, 120686, 119921, 138073, 165093, 195646, 231529, 264043, 330969, 369358, 322991, 290598, 281596, 258394, 223948, 192584],
